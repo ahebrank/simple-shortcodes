@@ -44,16 +44,34 @@ class plugin_shortcode {
   // subclass helpers
   protected function wrap_content($tag, $prefix, $suffix, $prefix_replace = null, $suffix_replace = null) {
     $counter = 0;
-    preg_match_all("|\[" . $tag . "\](.*)\[/".$tag."\]|Us", $this->interior, $tag_matches);
+    preg_match_all("`\[" . $tag . "\](.*)\[/".$tag."\]`Us", $this->interior, $tag_matches);
     for ($i = 0; $i < count($tag_matches[0]); $i++) {
       $counter += 1;
 
       $wrapper = $tag_matches[0][$i];
       $interior = $tag_matches[1][$i];
+
+      $interior = $this->strip_beginning($interior, '</p>');
+      $interior = $this->strip_end($interior, '<p>');
+
       $this_prefix = (!is_null($prefix_replace))? $this->replace_replace($prefix, $prefix_replace, array('COUNTER' => $counter)) : $prefix;
       $this_suffix = (!is_null($suffix_replace))? $this->replace_replace($suffix, $suffix_replace, array('COUNTER' => $counter)) : $suffix;
       $this->interior = str_replace($wrapper, $this_prefix  . $interior . $this_suffix, $this->interior);
     }
+  }
+
+  private function strip_beginning($str, $item) {
+    if (substr($str, 0, strlen($item)) === $item) {
+      $str = substr($str, strlen($item));
+    }
+    return $str;
+  }
+
+  private function strip_end($str, $item) {
+    if (substr($str,-strlen($item)) === $item) {
+      $str = substr($str, 0, strlen($str) - strlen($item));
+    }
+    return $str;
   }
 
   protected function strip_interior($tag) {

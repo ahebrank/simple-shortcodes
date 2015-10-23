@@ -38,13 +38,14 @@ class accordion_shortcode extends plugin_shortcode {
     $this->interior = preg_replace('/(\\[\\/item\\]).*(\\[item\\])/sU', '${1}${2}', $this->interior);
     $this->interior = preg_replace('/(\\[\\/item\\]).*(\\[\\/accordion\\])/sU', '${1}${2}', $this->interior);
 
-    $this->wrap_content('item', '<li class="accordion-navigation">', '</li>');
     $this->wrap_content('title', '<a href="#%s%d">', '</a>', array($this->params['id'], 'COUNTER'));
     $this->wrap_content('content', '<div id="%s%d" class="content">', '</div>', array($this->params['id'], 'COUNTER'));
-  
+    $this->wrap_content('item', '<li class="accordion-navigation">', '</li>');
+    
+    
     // remove extra paragraphs
-    $this->interior = preg_replace('/(<div.*>)(</p>)/sU', '${1}', $this->interior);
-    $this->interior = preg_replace('/(<p>)(<ul.*>|<div.*>|<li.*>)/sU', '${2}', $this->interior);
+    // $this->interior = preg_replace('/(<div.*>)(</p>)/sU', '${1}', $this->interior);
+    // $this->interior = preg_replace('/(<p>)(<ul.*>|<div.*>|<li.*>)/sU', '${2}', $this->interior);
     
   }
 
