@@ -20,9 +20,10 @@ class accordion_shortcode extends plugin_shortcode {
     'id' => 'accordion');
 
   public function render() {
-    $this->strip_interior("<br />");
-    $this->strip_interior("&nbsp;");
+    $this->strip_interior('<br />');
+    $this->strip_interior('&nbsp;');
     $this->parse_accordion_interior();
+    $this->strip_interior('<p></p>');
     return '<ul class="accordion" data-accordion>'.$this->interior.'</ul>';
   }
 
