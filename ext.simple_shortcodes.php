@@ -117,23 +117,23 @@ class Simple_shortcodes_ext {
 
     // find all the shortcodes
     foreach (array_keys($this->plugins) as $plugin) {
-      preg_match_all("|\[" . $plugin . " *(.*) *\](.*)\[/" . $plugin . "\]|Us", $final_template, $shortcode_matches); 
+      preg_match_all("|<p>\[" . $plugin . " *(?<params>.*) *\](?<interior>.*)\[/" . $plugin . "\]</p>|Us", $final_template, $shortcode_matches); 
       //echo "|\[" . $plugin . " +(.*) *\](.*)\[/" . $plugin . "\]|s"; exit();
       if (count($shortcode_matches[0])) {
         $closing_tag = TRUE;
       }
       else {
         // try again without a closing tag
-        preg_match_all("|\[" . $plugin . " *(.*) *\]|U", $final_template, $shortcode_matches);
+        preg_match_all("|(<p>)*\[" . $plugin . " *(.*) *\](</p>)*|", $final_template, $shortcode_matches);
         $closing_tag = FALSE;
       }
 
       for ($i = 0; $i < count($shortcode_matches[0]); $i++) {
         $shortcode = $shortcode_matches[0][$i];
-        $params = $this->get_params($shortcode_matches[1][$i]);
+        $params = $this->get_params($shortcode_matches['params'][$i]);
         $interior = "";
         if ($closing_tag) {
-          $interior = $shortcode_matches[2][$i];
+          $interior = $shortcode_matches['interior'][$i];
         }
 
         $snippet = $this->plugin_replacement($plugin, $params, $interior);

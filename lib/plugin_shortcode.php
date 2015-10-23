@@ -58,16 +58,17 @@ class plugin_shortcode {
       $this_suffix = (!is_null($suffix_replace))? $this->replace_replace($suffix, $suffix_replace, array('COUNTER' => $counter)) : $suffix;
       $this->interior = str_replace($wrapper, $this_prefix  . $interior . $this_suffix, $this->interior);
     }
+
   }
 
-  private function strip_beginning($str, $item) {
+  protected function strip_beginning($str, $item) {
     if (substr($str, 0, strlen($item)) === $item) {
       $str = substr($str, strlen($item));
     }
     return $str;
   }
 
-  private function strip_end($str, $item) {
+  protected function strip_end($str, $item) {
     if (substr($str,-strlen($item)) === $item) {
       $str = substr($str, 0, strlen($str) - strlen($item));
     }
