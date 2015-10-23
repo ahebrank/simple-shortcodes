@@ -117,15 +117,25 @@ class Simple_shortcodes_ext {
 
     // find all the shortcodes
     foreach (array_keys($this->plugins) as $plugin) {
+      // do a quick check just to see if it's in the template at all
+      if (strpos($final_template, '[' . $plugin) === FALSE) continue;
+
+      // try to find with closing tag
       preg_match_all("|<p>\[" . $plugin . " *(?<params>.*) *\](?<interior>.*)\[/" . $plugin . "\]</p>|Us", $final_template, $shortcode_matches); 
-      //echo "|\[" . $plugin . " +(.*) *\](.*)\[/" . $plugin . "\]|s"; exit();
       if (count($shortcode_matches[0])) {
         $closing_tag = TRUE;
       }
       else {
-        // try again without a closing tag
-        preg_match_all("|(<p>)*\[" . $plugin . " *(.*) *\](</p>)*|", $final_template, $shortcode_matches);
-        $closing_tag = FALSE;
+        // try again without the paragraphs
+        preg_match_all("|\[" . $plugin . " *(?<params>.*) *\](?<interior>.*)\[/" . $plugin . "\]|Us", $final_template, $shortcode_matches); 
+        if (count($shortcode_matches[0])) {
+          $closing_tag = TRUE;
+        }
+        else {
+          // try again without a closing tag
+          preg_match_all("|\[" . $plugin . " *(.*) *\]|", $final_template, $shortcode_matches);
+          $closing_tag = FALSE;
+        }
       }
 
       for ($i = 0; $i < count($shortcode_matches[0]); $i++) {
