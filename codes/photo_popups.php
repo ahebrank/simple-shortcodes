@@ -31,7 +31,11 @@ class photo_popups_shortcode extends plugin_shortcode {
   $('[data-photo-popup]').on({
     'mouseenter': function(e) {
       var div = $('<div class="photo-popup" style="position: absolute;">');
-      var img = $('<img width="200" src="' + $(this).attr('href') + '" alt="' + escape($(this).text()) + '">')
+      var imageUrl = $(this).attr('title');
+      if (typeof imageUrl === typeof undefined || imageUrl === false) {
+        imageUrl = $(this).attr('href');
+      }
+      var img = $('<img width="200" src="' + imageUrl + '" alt="' + escape($(this).text()) + '">')
       div.append(img);
       var offset = $(this).offset();
       div.css({
