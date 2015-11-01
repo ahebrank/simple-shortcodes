@@ -20,7 +20,7 @@ class photo_popups_shortcode extends plugin_shortcode {
   private function parse_photo_popups() {
     preg_match_all('/<a (.*)>/U', $this->interior, $matches);
     $replace = '<a %s data-photo-popup>';
-    for ($i = 0; $i < count($matches); $i++) {
+    for ($i = 0; $i < count($matches[0]); $i++) {
       $this->interior = str_replace($matches[0][$i], sprintf($replace, $matches[1][$i]), $this->interior);
     }
   }
