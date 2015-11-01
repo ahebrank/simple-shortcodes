@@ -32,6 +32,7 @@ class photo_popups_shortcode extends plugin_shortcode {
     'mouseenter': function(e) {
       var div = $('<div class="photo-popup" style="position: absolute;">');
       var imageUrl = $(this).attr('title');
+      $(this).removeAttr('title');
       if (typeof imageUrl === typeof undefined || imageUrl === false) {
         imageUrl = $(this).attr('href');
       }
