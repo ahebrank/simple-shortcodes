@@ -133,20 +133,28 @@ class Simple_shortcodes_ext {
         }
         else {
           // try again without a closing tag
-          preg_match_all("|\[" . $plugin . " *(.*) *\]|", $final_template, $shortcode_matches);
+          preg_match_all("|\[" . $plugin . " *(?<params>.*) *\]|", $final_template, $shortcode_matches);
           $closing_tag = FALSE;
         }
       }
 
       for ($i = 0; $i < count($shortcode_matches[0]); $i++) {
         $shortcode = $shortcode_matches[0][$i];
-        $params = $this->get_params($shortcode_matches['params'][$i]);
+        if (isset($shortcode_matches['params'][$i])) {
+          $params = $shortcode_matches['params'][$i];
+        }
+        else {
+          $params = "";
+        }
+        
+        $params = $this->get_params($params);
         $interior = "";
         if ($closing_tag) {
           $interior = $shortcode_matches['interior'][$i];
         }
 
         $snippet = $this->plugin_replacement($plugin, $params, $interior);
+        
         $final_template = str_replace($shortcode, $snippet, $final_template);
       }
     }

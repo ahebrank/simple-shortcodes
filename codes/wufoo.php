@@ -13,27 +13,34 @@ class wufoo_shortcode extends plugin_shortcode {
     'username', 'formhash');
 
   public function render() {
-    $params = $this->params;
+    $formhash = $this->params['formhash'];
+    $username = $this->params['username'];
+    $autoresize = $this->params['autoresize'];
+    $height = $this->params['height'];
+    $header = $this->params['header'];
+    $ssl = $this->params['ssl'];
+
     $output = <<<EOF
-<div id="wufoo-$params['formhash']">
-Fill out my <a href="https://$params['username'].wufoo.com/forms/$params['formhash']">online form</a>.
+<div id="wufoo-$formhash">
+Fill out my <a href="https://$formhash.wufoo.com/forms/$formhash">online form</a>.
 </div>
 <div id="wuf-adv" style="font-family:inherit;font-size: small;color:#a7a7a7;text-align:center;display:block;">HTML Forms powered by <a href="http://www.wufoo.com">Wufoo</a>.</div>
-<script type="text/javascript">var $params['formhash'];(function(d, t) {
+<script type="text/javascript">var $formhash;(function(d, t) {
 var s = d.createElement(t), options = {
-'userName':'$params['username']',
-'formHash':'$params['formhash']',
-'autoResize':$params['autoresize'],
-'height':'$params['height']',
+'userName':'vtperformingarts',
+'formHash':'$formhash',
+'autoResize':$autoresize,
+'height':'$height',
 'async':true,
 'host':'wufoo.com',
-'header':'$params['header']',
-'ssl':$params['ssl']};
+'header':'$header',
+'ssl':$ssl};
 s.src = ('https:' == d.location.protocol ? 'https://' : 'http://') + 'www.wufoo.com/scripts/embed/form.js';
 s.onload = s.onreadystatechange = function() {
 var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return;
-try { $params['formhash'] = new WufooForm();$params['formhash'].initialize(options);$params['formhash'].display(); } catch (e) {}};
+try { $formhash = new WufooForm();$formhash.initialize(options);$formhash.display(); } catch (e) {}};
 var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr);})(document, 'script');</script>
+
 EOF;
     
     return $output;
